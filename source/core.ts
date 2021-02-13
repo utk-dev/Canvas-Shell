@@ -1,5 +1,5 @@
-let canvasElement = <HTMLCanvasElement> document.getElementById("main");
-let canvas = canvasElement.getContext("2d");
+let canvasElement: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById("main");
+let canvas: CanvasRenderingContext2D = canvasElement.getContext("2d");
 
 let canvasManager: Array<any> = [];
 function requestRedraw(): void {
