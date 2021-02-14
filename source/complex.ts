@@ -20,7 +20,7 @@ class CSection {
         this._y = y;
         this.storySection = new SSection();
         this.base = (new PRect(x+10, y, 80, 100, Color.Green, Style.Fill)).hwnd;
-
+        this.storySection.storyPos = this.base.toString();
         if (has_source) {
             this.source = (new PRect(x, y+45, 10, 10, Color.Blue, Style.Fill)).hwnd;
         } else {
@@ -122,12 +122,28 @@ class CSection {
 
     // events
 
+    rightclick(mx: number, my: number) {
+        this.destroy();
+    }
+
     mousedown(mx: number, my: number) {
-        if (!DRAGGING) {
+        if (!DRAGGING && canvasManager[this.base].isInside(mx, my)) {
             DRAGGING = true;
             DRAGGING_EVENT_HANDLE = this.eventId;
             DRAG_HOLD_OFFSET_X = mx - this.x;
             DRAG_HOLD_OFFSET_Y = my - this.y;
+            return;
+        }
+        if (!DRAWING) {
+            for (let sinkItem of this.sink) {
+                let sinkObject: PRect = canvasManager[sinkItem];
+                if (sinkObject.isInside(mx, my)) {
+                    DRAWING_EVENT_HANDLE = (new CLink(sinkObject.x + 5, sinkObject.y + 5, mx, my, sinkItem)).eventId; 
+                    console.log(DRAWING_EVENT_HANDLE);
+                    DRAWING = true;
+                    return;
+                }
+            }
         }
     }
 
@@ -141,6 +157,35 @@ class CSection {
     mouseup(mx: number, my: number) {
         if (DRAGGING && DRAGGING_EVENT_HANDLE == this.eventId) {
             DRAGGING = false;
+        }
+    }
+
+    form() {
+        console.log(this.storySection);
+    }
+
+    destroy() {
+        for (let EObject of eventManager) {
+            if (EObject && EObject.storyLink && (this.sink.includes(EObject.storyLink.from) || this.sink.includes(EObject.storyLink.to))) {
+                EObject.destroy();
+            }
+        }
+        if (this.source) {
+            let eHandle = this.getLineToSyncWith(this.source, "to");
+            if (eHandle !== null) eventManager[eHandle].destroy();
+        }
+        eventManager[this.eventId] = null;
+        canvasManager[this.source] = null;
+        for (let CObject of this.sink) {
+            canvasManager[CObject] = null;
+        }
+        canvasManager[this.base] = null;
+        requestRedraw();
+        if (canvasManager.every(elem => elem === null)) {
+            canvasManager = [];
+        }
+        if (eventManager.every(elem => elem === null)) {
+            eventManager = [];
         }
     }
 }
@@ -164,6 +209,12 @@ class CLink {
         this.storyLink = null;
         eventManager[this.eventId] = null;
         requestRedraw();
+        if (canvasManager.every(elem => elem === null)) {
+            canvasManager = [];
+        }
+        if (eventManager.every(elem => elem === null)) {
+            eventManager = [];
+        }
     }
 
     public set xf(val: number) { canvasManager[this.base].xf = val; }
@@ -191,11 +242,32 @@ class CLink {
     }
 
     mousemove(mx: number, my: number) {
-
+        if (DRAWING && DRAWING_EVENT_HANDLE == this.eventId) {
+            this.xt = mx;
+            this.yt = my;
+        }
     }
 
     mouseup(mx: number, my: number) {
+        if (DRAWING && DRAWING_EVENT_HANDLE == this.eventId) {
+            for (let EObject of eventManager) {
+                if (EObject && EObject.source && canvasManager[EObject.source].isInside(mx, my)) {
+                    this.xt = canvasManager[EObject.source].x + 5;
+                    this.yt = canvasManager[EObject.source].y + 5;
+                    this.storyLink.to = EObject.source;
+                    DRAWING = false;
+                    DRAWING_EVENT_HANDLE = -1;
+                    return;
+                }
+            }
+            DRAWING = false;
+            DRAWING_EVENT_HANDLE = -1;
+            this.destroy();
+        }
+    }
 
+    form() {
+        console.log(this.storyLink);
     }
 }
 

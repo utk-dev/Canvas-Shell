@@ -16,6 +16,23 @@ function getRealCoordinates(ev: MouseEvent): Coordinate {
 
 canvasElement.addEventListener("click", function(ev: MouseEvent) {
     let mouse: Coordinate = getRealCoordinates(ev);
+    for (let EObject of eventManager) {
+        if (EObject && EObject.isInside(mouse.x, mouse.y)) {
+            EObject.form();
+            return;
+        }
+    }
+});
+
+canvasElement.addEventListener("contextmenu", function(ev: MouseEvent) {
+    let mouse: Coordinate = getRealCoordinates(ev);
+    ev.preventDefault();
+    for (let EObject of eventManager) {
+        if (EObject && EObject.isInside(mouse.x, mouse.y)) {
+            EObject.destroy();
+            return;
+        }
+    }
 });
 
 canvasElement.addEventListener("mousedown", function(ev: MouseEvent) {
@@ -30,6 +47,7 @@ canvasElement.addEventListener("mousedown", function(ev: MouseEvent) {
 
 canvasElement.addEventListener("mousemove", function(ev: MouseEvent) {
     let mouse: Coordinate = getRealCoordinates(ev);
+
     if (DRAGGING) {
         eventManager[DRAGGING_EVENT_HANDLE].mousemove(mouse.x, mouse.y);
     } else if (DRAWING) {
@@ -44,6 +62,12 @@ canvasElement.addEventListener("mouseup", function(ev: MouseEvent) {
     } else if (DRAWING) {
         eventManager[DRAWING_EVENT_HANDLE].mouseup(mouse.x, mouse.y);
     }
+});
+
+
+let btn: HTMLButtonElement = <HTMLButtonElement> document.getElementById("newSection");
+btn.addEventListener("click", function() {
+    let temp: CSection = new CSection(0, 0, 3, true);
 });
 
 // test

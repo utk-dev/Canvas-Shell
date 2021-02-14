@@ -10,6 +10,7 @@ var CSection = /** @class */ (function () {
         this._y = y;
         this.storySection = new SSection();
         this.base = (new PRect(x + 10, y, 80, 100, Color.Green, Style.Fill)).hwnd;
+        this.storySection.storyPos = this.base.toString();
         if (has_source) {
             this.source = (new PRect(x, y + 45, 10, 10, Color.Blue, Style.Fill)).hwnd;
         }
@@ -125,12 +126,28 @@ var CSection = /** @class */ (function () {
         return this._x <= mx && this._y <= my && mx <= this._x + 100 && my <= this._y + 100;
     };
     // events
+    CSection.prototype.rightclick = function (mx, my) {
+        this.destroy();
+    };
     CSection.prototype.mousedown = function (mx, my) {
-        if (!DRAGGING) {
+        if (!DRAGGING && canvasManager[this.base].isInside(mx, my)) {
             DRAGGING = true;
             DRAGGING_EVENT_HANDLE = this.eventId;
             DRAG_HOLD_OFFSET_X = mx - this.x;
             DRAG_HOLD_OFFSET_Y = my - this.y;
+            return;
+        }
+        if (!DRAWING) {
+            for (var _i = 0, _a = this.sink; _i < _a.length; _i++) {
+                var sinkItem = _a[_i];
+                var sinkObject = canvasManager[sinkItem];
+                if (sinkObject.isInside(mx, my)) {
+                    DRAWING_EVENT_HANDLE = (new CLink(sinkObject.x + 5, sinkObject.y + 5, mx, my, sinkItem)).eventId;
+                    console.log(DRAWING_EVENT_HANDLE);
+                    DRAWING = true;
+                    return;
+                }
+            }
         }
     };
     CSection.prototype.mousemove = function (mx, my) {
@@ -142,6 +159,36 @@ var CSection = /** @class */ (function () {
     CSection.prototype.mouseup = function (mx, my) {
         if (DRAGGING && DRAGGING_EVENT_HANDLE == this.eventId) {
             DRAGGING = false;
+        }
+    };
+    CSection.prototype.form = function () {
+        console.log(this.storySection);
+    };
+    CSection.prototype.destroy = function () {
+        for (var _i = 0, eventManager_1 = eventManager; _i < eventManager_1.length; _i++) {
+            var EObject = eventManager_1[_i];
+            if (EObject && EObject.storyLink && (this.sink.includes(EObject.storyLink.from) || this.sink.includes(EObject.storyLink.to))) {
+                EObject.destroy();
+            }
+        }
+        if (this.source) {
+            var eHandle = this.getLineToSyncWith(this.source, "to");
+            if (eHandle !== null)
+                eventManager[eHandle].destroy();
+        }
+        eventManager[this.eventId] = null;
+        canvasManager[this.source] = null;
+        for (var _a = 0, _b = this.sink; _a < _b.length; _a++) {
+            var CObject = _b[_a];
+            canvasManager[CObject] = null;
+        }
+        canvasManager[this.base] = null;
+        requestRedraw();
+        if (canvasManager.every(function (elem) { return elem === null; })) {
+            canvasManager = [];
+        }
+        if (eventManager.every(function (elem) { return elem === null; })) {
+            eventManager = [];
         }
     };
     return CSection;
@@ -159,6 +206,12 @@ var CLink = /** @class */ (function () {
         this.storyLink = null;
         eventManager[this.eventId] = null;
         requestRedraw();
+        if (canvasManager.every(function (elem) { return elem === null; })) {
+            canvasManager = [];
+        }
+        if (eventManager.every(function (elem) { return elem === null; })) {
+            eventManager = [];
+        }
     };
     Object.defineProperty(CLink.prototype, "xf", {
         get: function () { return canvasManager[this.base].xf; },
@@ -194,8 +247,31 @@ var CLink = /** @class */ (function () {
     CLink.prototype.mousedown = function (mx, my) {
     };
     CLink.prototype.mousemove = function (mx, my) {
+        if (DRAWING && DRAWING_EVENT_HANDLE == this.eventId) {
+            this.xt = mx;
+            this.yt = my;
+        }
     };
     CLink.prototype.mouseup = function (mx, my) {
+        if (DRAWING && DRAWING_EVENT_HANDLE == this.eventId) {
+            for (var _i = 0, eventManager_2 = eventManager; _i < eventManager_2.length; _i++) {
+                var EObject = eventManager_2[_i];
+                if (EObject && EObject.source && canvasManager[EObject.source].isInside(mx, my)) {
+                    this.xt = canvasManager[EObject.source].x + 5;
+                    this.yt = canvasManager[EObject.source].y + 5;
+                    this.storyLink.to = EObject.source;
+                    DRAWING = false;
+                    DRAWING_EVENT_HANDLE = -1;
+                    return;
+                }
+            }
+            DRAWING = false;
+            DRAWING_EVENT_HANDLE = -1;
+            this.destroy();
+        }
+    };
+    CLink.prototype.form = function () {
+        console.log(this.storyLink);
     };
     return CLink;
 }());

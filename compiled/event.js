@@ -13,11 +13,29 @@ function getRealCoordinates(ev) {
 }
 canvasElement.addEventListener("click", function (ev) {
     var mouse = getRealCoordinates(ev);
+    for (var _i = 0, eventManager_1 = eventManager; _i < eventManager_1.length; _i++) {
+        var EObject = eventManager_1[_i];
+        if (EObject && EObject.isInside(mouse.x, mouse.y)) {
+            EObject.form();
+            return;
+        }
+    }
+});
+canvasElement.addEventListener("contextmenu", function (ev) {
+    var mouse = getRealCoordinates(ev);
+    ev.preventDefault();
+    for (var _i = 0, eventManager_2 = eventManager; _i < eventManager_2.length; _i++) {
+        var EObject = eventManager_2[_i];
+        if (EObject && EObject.isInside(mouse.x, mouse.y)) {
+            EObject.destroy();
+            return;
+        }
+    }
 });
 canvasElement.addEventListener("mousedown", function (ev) {
     var mouse = getRealCoordinates(ev);
-    for (var _i = 0, eventManager_1 = eventManager; _i < eventManager_1.length; _i++) {
-        var EObject = eventManager_1[_i];
+    for (var _i = 0, eventManager_3 = eventManager; _i < eventManager_3.length; _i++) {
+        var EObject = eventManager_3[_i];
         if (EObject && EObject.isInside(mouse.x, mouse.y)) {
             EObject.mousedown(mouse.x, mouse.y);
             return;
@@ -41,6 +59,10 @@ canvasElement.addEventListener("mouseup", function (ev) {
     else if (DRAWING) {
         eventManager[DRAWING_EVENT_HANDLE].mouseup(mouse.x, mouse.y);
     }
+});
+var btn = document.getElementById("newSection");
+btn.addEventListener("click", function () {
+    var temp = new CSection(0, 0, 3, true);
 });
 // test
 var F = new CSection(0, 0, 3, true);
