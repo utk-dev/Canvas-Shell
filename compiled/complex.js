@@ -4,6 +4,9 @@ var DRAGGING = false;
 var DRAGGING_EVENT_HANDLE = -1;
 var DRAG_HOLD_OFFSET_X = -1;
 var DRAG_HOLD_OFFSET_Y = -1;
+var DRAGGING_CANVAS = false;
+var SELECTED_HANDLE = -1;
+var RESET_COLOR;
 var CSection = /** @class */ (function () {
     function CSection(x, y, no_of_sinks, has_source) {
         this._x = x;
@@ -165,6 +168,7 @@ var CSection = /** @class */ (function () {
         console.log(this.storySection);
     };
     CSection.prototype.destroy = function () {
+        DRAGGING = false;
         for (var _i = 0, eventManager_1 = eventManager; _i < eventManager_1.length; _i++) {
             var EObject = eventManager_1[_i];
             if (EObject && EObject.storyLink && (this.sink.includes(EObject.storyLink.from) || this.sink.includes(EObject.storyLink.to))) {
@@ -202,6 +206,7 @@ var CLink = /** @class */ (function () {
         eventManager.push(this);
     }
     CLink.prototype.destroy = function () {
+        DRAGGING = false;
         canvasManager[this.base] = null;
         this.storyLink = null;
         eventManager[this.eventId] = null;

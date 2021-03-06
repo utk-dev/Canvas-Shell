@@ -6,6 +6,11 @@ let DRAGGING_EVENT_HANDLE: number = -1;
 let DRAG_HOLD_OFFSET_X: number = -1;
 let DRAG_HOLD_OFFSET_Y: number = -1;
 
+let DRAGGING_CANVAS: boolean = false;
+
+let SELECTED_HANDLE: number = -1;
+let RESET_COLOR: Color;
+
 class CSection {
     private _x: number;
     private _y: number;
@@ -165,6 +170,7 @@ class CSection {
     }
 
     destroy() {
+        DRAGGING = false;
         for (let EObject of eventManager) {
             if (EObject && EObject.storyLink && (this.sink.includes(EObject.storyLink.from) || this.sink.includes(EObject.storyLink.to))) {
                 EObject.destroy();
@@ -205,6 +211,7 @@ class CLink {
     } 
 
     public destroy() {
+        DRAGGING = false;
         canvasManager[this.base] = null;
         this.storyLink = null;
         eventManager[this.eventId] = null;

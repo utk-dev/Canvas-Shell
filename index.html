@@ -11,14 +11,70 @@
         #main {
             border: 1px dashed black;
         }
+        form table, form tr, form td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 10px;
+        }
+        textarea {
+            height: 50px;
+            width: 300px;
+        }
     </style>
     <h1>Canvas Shell</h1>
-    <canvas id="main" height="600" width="900"></canvas>
+    <canvas id="main" height="600" width="900"></canvas> <br> <br>
     <button id="newSection">Add Section</button>
+    <form id="sectionForm" action="" method="post">
+        <h2>Section Details</h2>
+        <table>
+            <tr>
+                <td>Id:</td> 
+                <td><input type="number" id="sf_id" disabled></td>
+            </tr>
+            <tr>
+                <td>Text:</td> 
+                <td><textarea id="sf_text"> </textarea></td>
+            </tr>
+            <tr>
+                <td>Has Source?</td>
+                <td><input type="checkbox" id="sf_source"></td>
+            </tr>
+            <tr>
+                <td>No. of sinks:</td>
+                <td><input type="range" min="0" max="5" step="1" id="sf_sinks"></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center"><input type="submit" value="Save"></td>
+            </tr>
+        </table>
+    </form>
+    <form id="linkForm" action="" method="post">
+        <h2>Link Details</h2>
+        <table>
+            <tr>
+                <td>Id:</td> 
+                <td><input type="number" id="lf_id" disabled></td>
+            </tr>
+            <tr>
+                <td>Button Text:</td> 
+                <td><input type="text" id="lf_text"></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center"><input type="submit" value="Save"></td>
+            </tr>
+        </table>
+    </form>
+
+    <form id="linkForm" action="" method="post">
+
+    </form>
+
+
     <script src="compiled/core.js"></script>
     <script src="compiled/primitive.js"></script>
     <script src="compiled/story.js"></script>
     <script src="compiled/complex.js"></script>
+    <script src="compiled/form.js"></script>
     <script src="compiled/event.js"></script>
 </body>
 </html>

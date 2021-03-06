@@ -3,7 +3,7 @@ class SSection {
     public text: string;
     constructor() {
         this.storyPos = undefined;
-        this.text = undefined;
+        this.text = "";
     }
 }
 
@@ -14,7 +14,7 @@ class SLink {
     constructor() {
         this.from = undefined;
         this.to = undefined;
-        this.button = undefined;
+        this.button = "";
     }
 }
 
