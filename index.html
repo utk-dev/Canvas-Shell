@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <style>
         #main {
             border: 1px dashed black;
         }
-        form table, form tr, form td {
+
+        form table,
+        form tr,
+        form td {
             border: 1px solid black;
             border-collapse: collapse;
             padding: 10px;
         }
+
         textarea {
             height: 50px;
             width: 300px;
@@ -28,11 +34,11 @@
         <h2>Section Details</h2>
         <table>
             <tr>
-                <td>Id:</td> 
+                <td>Id:</td>
                 <td><input type="number" id="sf_id" disabled></td>
             </tr>
             <tr>
-                <td>Text:</td> 
+                <td>Text:</td>
                 <td><textarea id="sf_text"> </textarea></td>
             </tr>
             <tr>
@@ -52,11 +58,11 @@
         <h2>Link Details</h2>
         <table>
             <tr>
-                <td>Id:</td> 
+                <td>Id:</td>
                 <td><input type="number" id="lf_id" disabled></td>
             </tr>
             <tr>
-                <td>Button Text:</td> 
+                <td>Button Text:</td>
                 <td><input type="text" id="lf_text"></td>
             </tr>
             <tr>
@@ -65,16 +71,34 @@
         </table>
     </form>
 
-    <form id="linkForm" action="" method="post">
+    <table>
+        <form id="metaForm" action="" method="post">
+            <tr>
+                <td>Title: </td>
+                <td><input type="text" id="metaTitle" required></td>
+            </tr>
+            <tr>
+                <td>Summary: </td>
+                <td><input type="text" id="metaSummary" required></td>
+            </tr>
+            <tr>
+                <td>Price: </td>
+                <td><input type="text" id="metaPrice" required></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" value="GENERATE JSON"></td>
+            </tr>
+        </form>
+    </table>
 
-    </form>
-
-
+    <textarea id="generatedJson"></textarea>
     <script src="compiled/core.js"></script>
     <script src="compiled/primitive.js"></script>
     <script src="compiled/story.js"></script>
     <script src="compiled/complex.js"></script>
     <script src="compiled/form.js"></script>
+    <script src="compiled/jsongen.js"></script>
     <script src="compiled/event.js"></script>
 </body>
+
 </html>

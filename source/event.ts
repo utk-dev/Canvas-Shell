@@ -33,6 +33,11 @@ CLinkForm.addEventListener("submit", function (ev: Event) {
     saveCLinkForm();
 });
 
+metaForm.addEventListener("submit", function (ev: Event) {
+    ev.preventDefault();
+    generateJson();
+});
+
 canvasElement.addEventListener("click", function(ev: MouseEvent) {
     let mouse: Coordinate = getRealCoordinates(ev);
     for (let EObject of eventManager) {

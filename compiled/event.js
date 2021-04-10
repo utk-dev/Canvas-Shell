@@ -28,6 +28,10 @@ CLinkForm.addEventListener("submit", function (ev) {
     ev.preventDefault();
     saveCLinkForm();
 });
+metaForm.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    generateJson();
+});
 canvasElement.addEventListener("click", function (ev) {
     var mouse = getRealCoordinates(ev);
     for (var _i = 0, eventManager_1 = eventManager; _i < eventManager_1.length; _i++) {
