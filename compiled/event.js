@@ -1,33 +1,16 @@
-/** A 2D Coordinate */
-var Coordinate = /** @class */ (function () {
-    /**
-     * Constructs a 2D Coordinate
-     * @param x X Coordinate
-     * @param y Y Coordinate
-     */
+var Coordinate = (function () {
     function Coordinate(x, y) {
         this.x = x;
         this.y = y;
     }
     return Coordinate;
 }());
-/**
- * By default, the coordinates of a MouseEvent are based on the global coordinates. This
- * function converts them into local coodinates where origin is the top-left corner of the
- * canvas instead of the top-left corner of the whole page.
- * @param ev - MouseEvent
- * @returns `Coordinate` instance representing the point where MouseEvent occured
- */
 function getRealCoordinates(ev) {
     var el = canvasElement.getBoundingClientRect();
     var rx = ev.clientX - el.left;
     var ry = ev.clientY - el.top;
     return new Coordinate(rx, ry);
 }
-/**
- * Open an editing form for a Complex Shape whose `eventId` is given
- * @param eventHandle `eventId` of the Complex Shape
- */
 function openCorrespondingForm(eventHandle) {
     var obj = eventManager[eventHandle];
     if (obj instanceof CSection) {
@@ -37,7 +20,6 @@ function openCorrespondingForm(eventHandle) {
         fillCLinkForm(obj);
     }
 }
-// =========== EVENT LISTENERS ===========
 CSectionForm.addEventListener("submit", function (ev) {
     ev.preventDefault();
     saveCSectionForm();
@@ -70,7 +52,6 @@ canvasElement.addEventListener("click", function (ev) {
             return;
         }
     }
-    // reset everything if nothing is selected
     if (SELECTED_HANDLE !== -1) {
         if (eventManager[SELECTED_HANDLE] != null)
             canvasManager[eventManager[SELECTED_HANDLE].base].color = RESET_COLOR;
@@ -99,7 +80,6 @@ canvasElement.addEventListener("mousedown", function (ev) {
             return;
         }
     }
-    // else we are supposed to drag the canvas
     DRAGGING_CANVAS = true;
     DRAG_HOLD_OFFSET_X = mouse.x;
     DRAG_HOLD_OFFSET_Y = mouse.y;
@@ -114,7 +94,6 @@ canvasElement.addEventListener("mousemove", function (ev) {
         for (var _i = 0, eventManager_4 = eventManager; _i < eventManager_4.length; _i++) {
             var EObject = eventManager_4[_i];
             if (EObject instanceof CSection) {
-                // Moving a CSection automatically moves the lines attached to it.
                 EObject.x += diffX;
                 EObject.y += diffY;
             }
@@ -145,11 +124,5 @@ var btn = document.getElementById("newSection");
 btn.addEventListener("click", function () {
     var temp = new CSection(0, 0, 3, true);
 });
-// default configs: Hide all Complex Shape forms
 CSectionForm.style.display = "none";
 CLinkForm.style.display = "none";
-// test
-var F = new CSection(0, 0, 3, true);
-var G = new CSection(300, 300, 3, true);
-var K = new CLink(canvasManager[F.sink[1]].x + 5, canvasManager[F.sink[1]].y + 5, canvasManager[G.source].x + 5, canvasManager[G.source].y + 5, F.sink[1]);
-K.storyLink.to = G.source;
