@@ -1,16 +1,33 @@
+/** A 2D Coordinate */
 var Coordinate = /** @class */ (function () {
+    /**
+     * Constructs a 2D Coordinate
+     * @param x X Coordinate
+     * @param y Y Coordinate
+     */
     function Coordinate(x, y) {
         this.x = x;
         this.y = y;
     }
     return Coordinate;
 }());
+/**
+ * By default, the coordinates of a MouseEvent are based on the global coordinates. This
+ * function converts them into local coodinates where origin is the top-left corner of the
+ * canvas instead of the top-left corner of the whole page.
+ * @param ev - MouseEvent
+ * @returns `Coordinate` instance representing the point where MouseEvent occured
+ */
 function getRealCoordinates(ev) {
     var el = canvasElement.getBoundingClientRect();
     var rx = ev.clientX - el.left;
     var ry = ev.clientY - el.top;
     return new Coordinate(rx, ry);
 }
+/**
+ * Open an editing form for a Complex Shape whose `eventId` is given
+ * @param eventHandle `eventId` of the Complex Shape
+ */
 function openCorrespondingForm(eventHandle) {
     var obj = eventManager[eventHandle];
     if (obj instanceof CSection) {
@@ -20,6 +37,7 @@ function openCorrespondingForm(eventHandle) {
         fillCLinkForm(obj);
     }
 }
+// =========== EVENT LISTENERS ===========
 CSectionForm.addEventListener("submit", function (ev) {
     ev.preventDefault();
     saveCSectionForm();
@@ -52,6 +70,7 @@ canvasElement.addEventListener("click", function (ev) {
             return;
         }
     }
+    // reset everything if nothing is selected
     if (SELECTED_HANDLE !== -1) {
         if (eventManager[SELECTED_HANDLE] != null)
             canvasManager[eventManager[SELECTED_HANDLE].base].color = RESET_COLOR;
@@ -126,6 +145,7 @@ var btn = document.getElementById("newSection");
 btn.addEventListener("click", function () {
     var temp = new CSection(0, 0, 3, true);
 });
+// default configs: Hide all Complex Shape forms
 CSectionForm.style.display = "none";
 CLinkForm.style.display = "none";
 // test

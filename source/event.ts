@@ -1,12 +1,27 @@
+/** A 2D Coordinate */
 class Coordinate {
+    /** X-coordinate */
     public x: number;
+    /** Y-coordinate */
     public y: number;
+    /**
+     * Constructs a 2D Coordinate
+     * @param x X Coordinate
+     * @param y Y Coordinate
+     */
     constructor(x: number, y: number) {
         this.x = x;
         this.y = y;
     }
 }
 
+/**
+ * By default, the coordinates of a MouseEvent are based on the global coordinates. This
+ * function converts them into local coodinates where origin is the top-left corner of the
+ * canvas instead of the top-left corner of the whole page.
+ * @param ev - MouseEvent
+ * @returns `Coordinate` instance representing the point where MouseEvent occured
+ */
 function getRealCoordinates(ev: MouseEvent): Coordinate {
     let el: DOMRect = canvasElement.getBoundingClientRect();
     let rx: number = ev.clientX - el.left;
@@ -14,6 +29,10 @@ function getRealCoordinates(ev: MouseEvent): Coordinate {
     return new Coordinate(rx, ry);
 }
 
+/**
+ * Open an editing form for a Complex Shape whose `eventId` is given
+ * @param eventHandle `eventId` of the Complex Shape
+ */
 function openCorrespondingForm(eventHandle: number): void {
     let obj = eventManager[eventHandle];
     if (obj instanceof CSection) {
@@ -22,6 +41,8 @@ function openCorrespondingForm(eventHandle: number): void {
         fillCLinkForm(obj);
     }
 }
+
+// =========== EVENT LISTENERS ===========
 
 CSectionForm.addEventListener("submit", function (ev: Event) {
     ev.preventDefault();
@@ -57,6 +78,8 @@ canvasElement.addEventListener("click", function(ev: MouseEvent) {
             return;
         }
     }
+
+    // reset everything if nothing is selected
     if (SELECTED_HANDLE !== -1) {
         if (eventManager[SELECTED_HANDLE] != null)
             canvasManager[eventManager[SELECTED_HANDLE].base].color = RESET_COLOR;
@@ -135,6 +158,7 @@ btn.addEventListener("click", function() {
 });
 
 
+// default configs: Hide all Complex Shape forms
 CSectionForm.style.display = "none";
 CLinkForm.style.display = "none";
 
