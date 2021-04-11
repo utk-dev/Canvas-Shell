@@ -23,7 +23,7 @@ This editor has been structured as follows:
 
 1. **Primitive Shapes**: HTMLCanvas does not remember what is drawn on the screen. These classes encapsulate simple low-level canvasAPI shapes like rectangles and lines that know how to draw themselves on the screen and if the mouse-pointer is on them.
 2. **Story Classes**: These are meta-data classes that contain additional information about each node (in the example provided in this repository, these are the classes from the Storyteller project). This data can be edited through a form that shows up whenever a node is selected.
-3. **Complex Shapes**: These classes encapsulate seveal primitive shapes with a story class (meta-data) and contain various event handlers.
+3. **Complex Shapes**: These classes encapsulate several primitive shapes with a story class (meta-data) and contain various event handlers. All programmatic interaction with the node-editor are done through these classes.
 
 ### Usage Tips
 
