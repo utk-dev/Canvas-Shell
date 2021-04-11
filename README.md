@@ -40,3 +40,15 @@ for (let primitiveShape of canvasManager) {
 ```
 
 Canvas Shell follows the ImGUI pattern - An object is drawn as soon as it is instantiated. Still, if you arrive at a scenario where the UI is not updated, you can call the `requestRedraw()` function anytime to redraw everything on the screen with the latest data from the `canvasManager` array.
+
+If you want to understand how everything works, read the code in the following order (all files have been heavily commented):
+
+1. [source/core.ts](https://github.com/utk-dev/Canvas-Shell/blob/main/source/core.ts "Setup Code")
+2. [source/primitive.ts](https://github.com/utk-dev/Canvas-Shell/blob/main/source/primitive.ts "Primitive Shapes")
+3. [source/story.ts](https://github.com/utk-dev/Canvas-Shell/blob/main/source/story.ts "Meta Data")
+4. [source/complex.ts](https://github.com/utk-dev/Canvas-Shell/blob/main/source/complex.ts "Complex Shapes")
+5. [source/form.ts](https://github.com/utk-dev/Canvas-Shell/blob/main/source/form.ts "Form Handling")
+6. [source/jsongen.ts](https://github.com/utk-dev/Canvas-Shell/blob/main/source/jsongen.ts "Generating JSON")
+7. [source/event.ts](https://github.com/utk-dev/Canvas-Shell/blob/main/source/event.ts "Event Handlers")
+
+All pull requests are welcome!
