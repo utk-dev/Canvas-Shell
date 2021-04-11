@@ -163,6 +163,7 @@ CSectionForm.style.display = "none";
 CLinkForm.style.display = "none";
 
 // test
+/*
 let F = new CSection(0, 0, 3, true);
 let G = new CSection(300, 300, 3, true);
 let K = new CLink(
@@ -174,3 +175,4 @@ let K = new CLink(
 );
 
 K.storyLink.to = G.source;
+*/
